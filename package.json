@@ -1,0 +1,41 @@
+{
+  "name": "my-lib",
+  "version": "0.0.0",
+  "author": "Abiee Alejandro",
+  "description": "Boilerplate code to create ES6 libraries",
+  "main": "dist/MyLibrary.js",
+  "scripts": {
+    "test": "gulp test",
+    "prepublish": "gulp build"
+  },
+  "devDependencies": {
+    "6to5": "^2.13.7",
+    "chai": "^1.10.0",
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "gulp-6to5": "^2.0.2",
+    "gulp-istanbul": "git://github.com/jmeas/gulp-istanbul.git#isparta",
+    "gulp-jshint": "^1.9.0",
+    "gulp-load-plugins": "^0.8.0",
+    "gulp-mocha": "^2.0.0",
+    "gulp-notify": "^2.1.0",
+    "gulp-watch": "^4.1.0",
+    "jshint-stylish": "^1.0.0",
+    "mocha": "^2.1.0",
+    "xunit-file": "0.0.6"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abiee/clean-es6-project.git"
+  },
+  "keywords": [
+    "bootstrap",
+    "boilerplate",
+    "es6",
+    "starter"
+  ],
+  "licence": "MIT"
+}
