@@ -1,6 +1,6 @@
 /* jshint node:true */
 
-const to5 = require('gulp-6to5');
+var isparta = require('isparta');
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 
@@ -37,15 +37,15 @@ gulp.task('lint:test', function() {
 // Compile library to ECMAScript 5
 gulp.task('build', ['lint:src', 'clean'], function() {
   return gulp.src('src/**/*.js')
-    .pipe(to5({blacklist: ['useStrict'], modules: 'common'}))
+    .pipe($.babel({blacklist: ['useStrict'], modules: 'common'}))
     .pipe(gulp.dest('dist'))
 });
 
 // Create a coverage report
 gulp.task('coverage', function(done) {
-  require('6to5/register')({ modules: 'common' });
+  require('babel/register')({ modules: 'common' });
   gulp.src(['src/**/*.js'])
-    .pipe($.istanbul())
+    .pipe($.istanbul({ instrumenter: isparta.Instrumenter }))
     .on('finish', function() {
       return test()
         .pipe($.istanbul.writeReports())
@@ -55,13 +55,13 @@ gulp.task('coverage', function(done) {
 
 // Lint and run our tests
 gulp.task('test', ['lint:src', 'lint:test'], function() {
-  require('6to5/register')({modules: 'common'});
+  require('babel/register')({modules: 'common'});
   return test();
 });
 
 // Lint and run our tests. It creates a xunit report also
 gulp.task('test:ci', ['lint:src', 'lint:test'], function() {
-  require('6to5/register')({modules: 'common'});
+  require('babel/register')({modules: 'common'});
   return test('xunit-file');
 });
 
