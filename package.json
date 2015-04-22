@@ -9,20 +9,20 @@
     "prepublish": "gulp build"
   },
   "devDependencies": {
-    "babel": "^4.7.16",
+    "babel": "^5.1.11",
     "chai": "^2.2.0",
     "del": "^1.1.1",
     "gulp": "^3.8.11",
-    "gulp-babel": "^4.0.1",
-    "gulp-istanbul": "^0.7.0",
-    "gulp-jshint": "^1.9.4",
-    "gulp-load-plugins": "^0.9.0",
+    "gulp-babel": "^5.1.0",
+    "gulp-istanbul": "^0.8.1",
+    "gulp-jshint": "^1.10.0",
+    "gulp-load-plugins": "^0.10.0",
     "gulp-mocha": "^2.0.1",
     "gulp-notify": "^2.2.0",
-    "gulp-watch": "^4.2.2",
-    "isparta": "^2.2.0",
+    "gulp-watch": "^4.2.4",
+    "isparta": "^3.0.3",
     "jshint-stylish": "^1.0.1",
-    "mocha": "^2.2.1",
+    "mocha": "^2.2.4",
     "xunit-file": "0.0.6"
   },
   "engines": {
