@@ -1,6 +1,6 @@
 {
   "name": "yammo-ecs",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "author": "Pierre Beaujeu",
   "description": "Entity Component System for ES6",
   "main": "dist/ecs.js",
@@ -35,10 +35,6 @@
     "url": "https://github.com/abiee/clean-es6-project.git"
   },
   "keywords": [
-    "bootstrap",
-    "boilerplate",
-    "es6",
-    "starter"
   ],
   "licence": "MIT"
 }
