@@ -9,6 +9,7 @@ class ECS {
      */
     this.entitiesSystemsDirty = [];
     this.systems = [];
+    this.componentsSchemas = [];
     this.updateCounter = 0;
   }
   addEntity(entity) {

@@ -1,6 +1,6 @@
 {
   "name": "yammo-ecs",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Pierre Beaujeu",
   "description": "Entity Component System for ES6",
   "main": "dist/ecs.js",

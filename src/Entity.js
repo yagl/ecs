@@ -1,5 +1,6 @@
 
 import {UIDGenerator, DefaultUIDGenerator} from './uid';
+import {fastBind} from './utils';
 
 class Entity {
   constructor(idOrUidGenerator) {
@@ -69,21 +70,39 @@ class Entity {
       this.systems.splice(index, 1);
     }
   }
-  addComponent(name, componentData = {}) {
-    if (!this.components[name]) {
-      throw new Error(`component '${name}' does not exists`);
+  addComponent(Component) {
+    if (this.components[Component.name]) {
+      throw new Error(`component '${name}' already not exists`);
     }
 
-    this.components[name] = componentData;
+    this.components[Component.name] = new Component();
     this.setSystemsDirty();
   }
-  removeComponent(name) {
-    if (!this.components[name]) {
+  applyComponentMixins(Component) {
+    if (!Component.mixins) {
+      return false;
+    }
+
+    for (var i = 0, mixin; mixin = Component.mixins[i]; i += 1) {
+      this[mixin.name] = fastBind(this, mixin.method);
+    }
+  }
+  removeComponent(Component) {
+    if (!this.components[Component.name]) {
       return;
     }
 
     this.components[name] = undefined;
     this.setSystemsDirty();
+  }
+  removeComponentMixins(Component) {
+    if (!Component.mixins) {
+      return false;
+    }
+
+    for (var i = 0, mixin; mixin = Component.mixins[i]; i += 1) {
+      this[mixin.name] = undefined;
+    }
   }
   dispose() {
     for (var i = 0, system; system = this.systems[i]; i += 1) {

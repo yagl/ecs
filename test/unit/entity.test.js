@@ -1,5 +1,18 @@
 import Entity from '../../src/Entity';
 
+class FakeComponent {
+  constructor() {
+    this.attr = null;
+  }
+}
+
+FakeComponent.mixins = [{
+  name: 'test',
+  method: function () {
+
+  }
+}];
+
 describe('Entity', () => {
   it('should initialize', () => {
     let entity = new Entity();
@@ -12,5 +25,9 @@ describe('Entity', () => {
     let entity2 = new Entity();
 
     expect(entity1.id).to.be.not.equal(entity2.id);
+  });
+
+  describe('addComponent()', () => {
+
   });
 });
