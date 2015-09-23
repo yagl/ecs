@@ -1,5 +1,5 @@
 {
-  "name": "yammo-ecs",
+  "name": "yagl-ecs",
   "version": "0.0.6",
   "author": "Pierre Beaujeu",
   "description": "Entity Component System for ES6",
@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/abiee/clean-es6-project.git"
+    "url": "https://github.com/yagl/ecs.git"
   },
   "keywords": [
   ],
