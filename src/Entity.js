@@ -70,39 +70,17 @@ class Entity {
       this.systems.splice(index, 1);
     }
   }
-  addComponent(Component) {
-    if (this.components[Component.name]) {
-      throw new Error(`component '${name}' already not exists`);
-    }
-
-    this.components[Component.name] = new Component();
+  addComponent(name, data) {
+    this.components[name] = data || {};
     this.setSystemsDirty();
   }
-  applyComponentMixins(Component) {
-    if (!Component.mixins) {
-      return false;
-    }
-
-    for (var i = 0, mixin; mixin = Component.mixins[i]; i += 1) {
-      this[mixin.name] = fastBind(this, mixin.method);
-    }
-  }
-  removeComponent(Component) {
-    if (!this.components[Component.name]) {
+  removeComponent(name) {
+    if (!this.components[name]) {
       return;
     }
 
     this.components[name] = undefined;
     this.setSystemsDirty();
-  }
-  removeComponentMixins(Component) {
-    if (!Component.mixins) {
-      return false;
-    }
-
-    for (var i = 0, mixin; mixin = Component.mixins[i]; i += 1) {
-      this[mixin.name] = undefined;
-    }
   }
   dispose() {
     for (var i = 0, system; system = this.systems[i]; i += 1) {
