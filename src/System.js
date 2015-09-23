@@ -1,16 +1,54 @@
+/**
+ * @module  ecs
+ */
 
 // forced to disable this check for abstract methods
 // jshint unused:false
+/**
+ * @class  System
+ *
+ * @description  A system update all eligible entities at a given frequency. 
+ * This class is not meant to be used directly and should be sub-classed to 
+ * define specific logic.
+ */
 class System {
-  constructor() {
+  /**
+   * @class  System
+   * @constructor
+   * @param [frequency=1] {Number} Frequency of execution.
+   */
+  constructor(frequency=1) {
+    /**
+     * Frequency of update execution, a frequency of `1` run the system every
+     * update, `2` will run the system every 2 updates, ect.
+     * @property {Number} frequency
+     */
+    this.frequency = frequency;
+
+    /**
+     * Entities of the system.
+     * 
+     * @property {Array[Entity]} entities
+     */
     this.entities = [];
   }
+  /**
+   * Add an entity to the system entities.
+   * 
+   * @param {Entity} entity The entity to add to the system.
+   */
   addEntity(entity) {
     entity.addSystem(this);
     this.entities.push(entity);
 
     this.enter(entity);
   }
+  /**
+   * Remove an entity from the system entities. exit() handler is executed
+   * only if the entity actually exists in the system entities.
+   * 
+   * @param  {Entity} entity Reference of the entity to remove.
+   */
   removeEntity(entity) {
     let index = this.entities.indexOf(entity);
 
@@ -21,6 +59,11 @@ class System {
       this.exit(entity);
     }
   }
+  /**
+   * Apply update to each entity of this system.
+   *
+   * @method  updateAll
+   */
   updateAll() {
     for (var i = 0, entity; entity = this.entities[i]; i += 1) {
       this.update(entity);
@@ -28,25 +71,35 @@ class System {
   }
   // methods to be extended by subclasses
   /**
-   * returns true if the entity should be processed by the current system
-   * @param  {Entity} entity the entity to test
+   * Abstract method to subclass. Should return true if the entity is eligible
+   * to the system, false otherwise.
+   *
+   * @method  test
+   * @param  {Entity} entity The entity to test.
    */
   test(entity) {
     return false;
   }
   /**
-   * called when an entity is added to the system
-   * @param  {Entity} entity the added entity
+   * Abstract method to subclass. Called when an entity is added to the system.
+   *
+   * @method  enter
+   * @param  {Entity} entity The added entity.
    */
   enter(entity) {}
   /**
-   * called when an entity is removed from the system
-   * @param  {Entity} entity the removed entity
+   * Abstract method to subclass. Called when an entity is removed from the system.
+   *
+   * @method  exit
+   * @param  {Entity} entity The removed entity.
    */
   exit(entity) {}
   /**
-   * called for each entity to update
-   * @param  {Entity} entity the entity to update
+   * Abstract method to subclass. Called for each entity to update. This is 
+   * the only method that should actual mutate entity state.
+   * 
+   * @method  update
+   * @param  {Entity} entity The entity to update.
    */
   update(entity) {}
 }

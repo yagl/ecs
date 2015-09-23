@@ -1,12 +1,31 @@
+/**
+ * @module  ecs
+ */
 
 import {UIDGenerator, DefaultUIDGenerator} from './uid';
-import {fastBind} from './utils';
 
+/**
+ * An entity.
+ * 
+ * @class  Entity
+ */
 class Entity {
-  constructor(idOrUidGenerator) {
+  /**
+   * @class Entity
+   * @constructor
+   * 
+   * @param  {Number|UIDGenerator} [idOrUidGenerator=null] The entity id if
+   * a Number is passed. If an UIDGenerator is passed, the entity will use
+   * it to generate a new id. If nothing is passed, the entity will use
+   * the default UIDGenerator.
+   *
+   * @param {Array[Component]} [components=[]] An array of initial components.
+   */
+  constructor(idOrUidGenerator, components = []) {
     /**
-     * unique identifier of the entity
-     * @type {Number}
+     * Unique identifier of the entity.
+     * 
+     * @property {Number} id
      */
     this.id = null;
 
@@ -26,32 +45,62 @@ class Entity {
     }
 
     /**
-     * Systems applied each update to the entity
-     * @type {Array[System]}
+     * Systems applied to the entity.
+     * 
+     * @property {Array[System]} systems
      */
     this.systems = [];
 
     /**
-     * if true the systems are computed again at the beginning of the next ecs tick
-     * @type {Boolean}
+     * Indiquate a change in components (a component was removed or added)
+     * which require to re-compute entity eligibility to all systems.
+     * 
+     * @property {Boolean} systemsDirty
      */
     this.systemsDirty = true;
 
     /**
-     * components of the entity
-     * @type {Object|Number|String}
+     * Components of the entity stored as key-value pairs.
+     * 
+     * @property {Object} components
      */
     this.components = {};
 
+    // components initialisation
+    for (let i = 0, component; component = components[i]; i += 1) {
+      // if a getDefaults method is provided, use it. First because let the
+      // runtime allocate the component is way more faster than using a copy
+      // function. Secondly because the user may want to provide some kind
+      // of logic in components initialisation ALTHOUGH these kind of 
+      // initialisation should be done in enter() handler
+      if (component.getDefaults) {
+        this.components[component.name] = component.getDefaults();
+      } else {
+        this.components[component.name] = Object.assign({}, 
+          components[i].defaults);
+      }
+    }
+
     /**
-     * a reference to parent ECS class
-     * @type {ECS}
+     * A reference to parent ECS class.
+     * @property {ECS} ecs
      */
     this.ecs = null;
   }
+  /**
+   * Set the parent ecs reference.
+   *
+   * @private
+   * @param {ECS} ecs An ECS class instance.
+   */
   addToECS(ecs) {
     this.ecs = ecs;
   }
+  /**
+   * Set the systems dirty flag so the ECS knows this entity 
+   * needs to recompute eligibility at the beginning of next 
+   * tick.
+   */
   setSystemsDirty() {
     if (!this.systemsDirty) {
       this.systemsDirty = true;
@@ -60,9 +109,21 @@ class Entity {
       this.ecs.entitiesSystemsDirty.push(this);
     }
   }
+  /**
+   * Add a system to the entity.
+   *
+   * @private
+   * @param {System} system The system to add.
+   */
   addSystem(system) {
     this.systems.push(system);
   }
+  /**
+   * Remove a system from the entity.
+   *
+   * @private
+   * @param  {System} system The system reference to remove.
+   */
   removeSystem(system) {
     let index = this.systems.indexOf(system);
 
@@ -70,10 +131,26 @@ class Entity {
       this.systems.splice(index, 1);
     }
   }
+  /**
+   * Add a component to the entity. WARNING this method does not copy
+   * components data but assign directly the reference for maximum
+   * performances. Be sure not to pass the same component reference to
+   * many entities.
+   * 
+   * @param {String} name Attribute name of the component to add.
+   * @param {Object} data Component data.
+   */
   addComponent(name, data) {
-    this.components[name] = data || {};
+    this.components[name] = data;
     this.setSystemsDirty();
   }
+  /**
+   * Remove a component from the entity. To preserve performances, we 
+   * simple set the component property to `undefined`. Therefore the 
+   * property is still enumerable after a call to removeComponent()
+   * 
+   * @param  {String} name Name of the component to remove.
+   */
   removeComponent(name) {
     if (!this.components[name]) {
       return;
@@ -82,6 +159,11 @@ class Entity {
     this.components[name] = undefined;
     this.setSystemsDirty();
   }
+  /**
+   * Dispose the entity.
+   *
+   * @private
+   */
   dispose() {
     for (var i = 0, system; system = this.systems[i]; i += 1) {
       system.removeEntity(this);

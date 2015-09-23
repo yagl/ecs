@@ -49,9 +49,9 @@ describe('uid', () => {
     expect(gen1.salt).to.be.a('number').and.to.be.not.equal(gen2.salt);
   });
 
-  it('should return incremented salts when calling nextGeneratorSalt()', () => {
-    let salt1 = uid.nextGeneratorSalt();
-    let salt2 = uid.nextGeneratorSalt();
+  it('should return incremented salts when calling nextSalt()', () => {
+    let salt1 = uid.nextSalt();
+    let salt2 = uid.nextSalt();
 
     expect(salt1).to.be.a('number').and.to.be.not.equal(salt2);
   });

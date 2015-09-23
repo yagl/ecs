@@ -6,17 +6,54 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * @module  ecs
+ */
+
 // forced to disable this check for abstract methods
 // jshint unused:false
+/**
+ * @class  System
+ *
+ * @description  A system update all eligible entities at a given frequency. 
+ * This class is not meant to be used directly and should be sub-classed to 
+ * define specific logic.
+ */
 
 var System = (function () {
+  /**
+   * @class  System
+   * @constructor
+   * @param [frequency=1] {Number} Frequency of execution.
+   */
+
   function System() {
+    var frequency = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+
     _classCallCheck(this, System);
 
+    /**
+     * Frequency of update execution, a frequency of `1` run the system every
+     * update, `2` will run the system every 2 updates, ect.
+     * @property {Number} frequency
+     */
+    this.frequency = frequency;
+
+    /**
+     * Entities of the system.
+     * 
+     * @property {Array[Entity]} entities
+     */
     this.entities = [];
   }
 
   // jshint unused:true
+
+  /**
+   * Add an entity to the system entities.
+   * 
+   * @param {Entity} entity The entity to add to the system.
+   */
 
   _createClass(System, [{
     key: "addEntity",
@@ -26,6 +63,13 @@ var System = (function () {
 
       this.enter(entity);
     }
+
+    /**
+     * Remove an entity from the system entities. exit() handler is executed
+     * only if the entity actually exists in the system entities.
+     * 
+     * @param  {Entity} entity Reference of the entity to remove.
+     */
   }, {
     key: "removeEntity",
     value: function removeEntity(entity) {
@@ -38,6 +82,12 @@ var System = (function () {
         this.exit(entity);
       }
     }
+
+    /**
+     * Apply update to each entity of this system.
+     *
+     * @method  updateAll
+     */
   }, {
     key: "updateAll",
     value: function updateAll() {
@@ -48,8 +98,11 @@ var System = (function () {
 
     // methods to be extended by subclasses
     /**
-     * returns true if the entity should be processed by the current system
-     * @param  {Entity} entity the entity to test
+     * Abstract method to subclass. Should return true if the entity is eligible
+     * to the system, false otherwise.
+     *
+     * @method  test
+     * @param  {Entity} entity The entity to test.
      */
   }, {
     key: "test",
@@ -58,24 +111,31 @@ var System = (function () {
     }
 
     /**
-     * called when an entity is added to the system
-     * @param  {Entity} entity the added entity
+     * Abstract method to subclass. Called when an entity is added to the system.
+     *
+     * @method  enter
+     * @param  {Entity} entity The added entity.
      */
   }, {
     key: "enter",
     value: function enter(entity) {}
 
     /**
-     * called when an entity is removed from the system
-     * @param  {Entity} entity the removed entity
+     * Abstract method to subclass. Called when an entity is removed from the system.
+     *
+     * @method  exit
+     * @param  {Entity} entity The removed entity.
      */
   }, {
     key: "exit",
     value: function exit(entity) {}
 
     /**
-     * called for each entity to update
-     * @param  {Entity} entity the entity to update
+     * Abstract method to subclass. Called for each entity to update. This is 
+     * the only method that should actual mutate entity state.
+     * 
+     * @method  update
+     * @param  {Entity} entity The entity to update.
      */
   }, {
     key: "update",

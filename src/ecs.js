@@ -4,6 +4,10 @@
  * @module ecs
  */
 
+import Entity from './entity';
+import System from './system';
+import uid from './uid';
+
 /**
  * @class  ECS
  */
@@ -182,5 +186,10 @@ class ECS {
     this.updateCounter += 1;
   }
 }
+
+// expose user stuff
+ECS.Entity = Entity;
+ECS.System = System;
+ECS.uid = uid;
 
 export default ECS;

@@ -1,16 +1,30 @@
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 /**
  * Entity Component System module
  *
  * @module ecs
  */
+
+var _entity = require('./entity');
+
+var _entity2 = _interopRequireDefault(_entity);
+
+var _system = require('./system');
+
+var _system2 = _interopRequireDefault(_system);
+
+var _uid = require('./uid');
+
+var _uid2 = _interopRequireDefault(_uid);
 
 /**
  * @class  ECS
@@ -58,6 +72,8 @@ var ECS = (function () {
     this.updateCounter = 0;
   }
 
+  // expose user stuff
+
   /**
    * Add an entity to the ecs.
    *
@@ -66,7 +82,7 @@ var ECS = (function () {
    */
 
   _createClass(ECS, [{
-    key: "addEntity",
+    key: 'addEntity',
     value: function addEntity(entity) {
       this.entities.push(entity);
       entity.addToECS(this);
@@ -80,7 +96,7 @@ var ECS = (function () {
      * @return {Entity}        the remove entity if any
      */
   }, {
-    key: "removeEntity",
+    key: 'removeEntity',
     value: function removeEntity(entity) {
       var index = this.entities.indexOf(entity);
       var entityRemoved = null;
@@ -105,7 +121,7 @@ var ECS = (function () {
      * @return {Entity}          removed entity if any
      */
   }, {
-    key: "removeEntityById",
+    key: 'removeEntityById',
     value: function removeEntityById(entityId) {
       for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
         if (entity.id === entityId) {
@@ -126,7 +142,7 @@ var ECS = (function () {
      * @param  {[type]} entity entity to remove
      */
   }, {
-    key: "removeEntityIfDirty",
+    key: 'removeEntityIfDirty',
     value: function removeEntityIfDirty(entity) {
       var index = this.entitiesSystemsDirty.indexOf(entity);
 
@@ -142,7 +158,7 @@ var ECS = (function () {
      * @param {System} system system to add
      */
   }, {
-    key: "addSystem",
+    key: 'addSystem',
     value: function addSystem(system) {
       this.systems.push(system);
     }
@@ -154,7 +170,7 @@ var ECS = (function () {
      * @param  {System} system system reference
      */
   }, {
-    key: "removeSystem",
+    key: 'removeSystem',
     value: function removeSystem(system) {
       var index = this.systems.indexOf(system);
 
@@ -171,7 +187,7 @@ var ECS = (function () {
      * @method cleanDirtyEntities
      */
   }, {
-    key: "cleanDirtyEntities",
+    key: 'cleanDirtyEntities',
     value: function cleanDirtyEntities() {
       // jshint maxdepth: 4
       for (var i = 0, entity = undefined; entity = this.entitiesSystemsDirty[i]; i += 1) {
@@ -201,7 +217,7 @@ var ECS = (function () {
      * @method update
      */
   }, {
-    key: "update",
+    key: 'update',
     value: function update() {
       for (var i = 0, system = undefined; system = this.systems[i]; i += 1) {
         if (this.updateCounter % system.frequency > 0) {
@@ -223,5 +239,9 @@ var ECS = (function () {
   return ECS;
 })();
 
-exports["default"] = ECS;
-module.exports = exports["default"];
+ECS.Entity = _entity2['default'];
+ECS.System = _system2['default'];
+ECS.uid = _uid2['default'];
+
+exports['default'] = ECS;
+module.exports = exports['default'];

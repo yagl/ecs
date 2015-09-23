@@ -1,4 +1,4 @@
-import Entity from '../../src/Entity';
+import Entity from '../../src/entity';
 
 class FakeComponent {
   constructor() {

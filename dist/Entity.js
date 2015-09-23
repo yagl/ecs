@@ -6,17 +6,40 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
+/**
+ * @module  ecs
+ */
+
 var _uid = require('./uid');
 
-var _utils = require('./utils');
+/**
+ * An entity.
+ * 
+ * @class  Entity
+ */
 
 var Entity = (function () {
+  /**
+   * @class Entity
+   * @constructor
+   * 
+   * @param  {Number|UIDGenerator} [idOrUidGenerator=null] The entity id if
+   * a Number is passed. If an UIDGenerator is passed, the entity will use
+   * it to generate a new id. If nothing is passed, the entity will use
+   * the default UIDGenerator.
+   *
+   * @param {Array[Component]} [components=[]] An array of initial components.
+   */
+
   function Entity(idOrUidGenerator) {
+    var components = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+
     _classCallCheck(this, Entity);
 
     /**
-     * unique identifier of the entity
-     * @type {Number}
+     * Unique identifier of the entity.
+     * 
+     * @property {Number} id
      */
     this.id = null;
 
@@ -36,35 +59,66 @@ var Entity = (function () {
     }
 
     /**
-     * Systems applied each update to the entity
-     * @type {Array[System]}
+     * Systems applied to the entity.
+     * 
+     * @property {Array[System]} systems
      */
     this.systems = [];
 
     /**
-     * if true the systems are computed again at the beginning of the next ecs tick
-     * @type {Boolean}
+     * Indiquate a change in components (a component was removed or added)
+     * which require to re-compute entity eligibility to all systems.
+     * 
+     * @property {Boolean} systemsDirty
      */
     this.systemsDirty = true;
 
     /**
-     * components of the entity
-     * @type {Object|Number|String}
+     * Components of the entity stored as key-value pairs.
+     * 
+     * @property {Object} components
      */
     this.components = {};
 
+    // components initialisation
+    for (var i = 0, component = undefined; component = components[i]; i += 1) {
+      // if a getDefaults method is provided, use it. First because let the
+      // runtime allocate the component is way more faster than using a copy
+      // function. Secondly because the user may want to provide some kind
+      // of logic in components initialisation ALTHOUGH these kind of
+      // initialisation should be done in enter() handler
+      if (component.getDefaults) {
+        this.components[component.name] = component.getDefaults();
+      } else {
+        this.components[component.name] = Object.assign({}, components[i].defaults);
+      }
+    }
+
     /**
-     * a reference to parent ECS class
-     * @type {ECS}
+     * A reference to parent ECS class.
+     * @property {ECS} ecs
      */
     this.ecs = null;
   }
+
+  /**
+   * Set the parent ecs reference.
+   *
+   * @private
+   * @param {ECS} ecs An ECS class instance.
+   */
 
   _createClass(Entity, [{
     key: 'addToECS',
     value: function addToECS(ecs) {
       this.ecs = ecs;
     }
+
+    /**
+     * Set the systems dirty flag so the ECS knows this entity 
+     * needs to recompute eligibility at the beginning of next 
+     * tick.
+     */
   }, {
     key: 'setSystemsDirty',
     value: function setSystemsDirty() {
@@ -75,11 +129,25 @@ var Entity = (function () {
         this.ecs.entitiesSystemsDirty.push(this);
       }
     }
+
+    /**
+     * Add a system to the entity.
+     *
+     * @private
+     * @param {System} system The system to add.
+     */
   }, {
     key: 'addSystem',
     value: function addSystem(system) {
       this.systems.push(system);
     }
+
+    /**
+     * Remove a system from the entity.
+     *
+     * @private
+     * @param  {System} system The system reference to remove.
+     */
   }, {
     key: 'removeSystem',
     value: function removeSystem(system) {
@@ -89,48 +157,46 @@ var Entity = (function () {
         this.systems.splice(index, 1);
       }
     }
+
+    /**
+     * Add a component to the entity. WARNING this method does not copy
+     * components data but assign directly the reference for maximum
+     * performances. Be sure not to pass the same component reference to
+     * many entities.
+     * 
+     * @param {String} name Attribute name of the component to add.
+     * @param {Object} data Component data.
+     */
   }, {
     key: 'addComponent',
-    value: function addComponent(Component) {
-      if (this.components[Component.name]) {
-        throw new Error('component \'' + name + '\' already not exists');
-      }
-
-      this.components[Component.name] = new Component();
+    value: function addComponent(name, data) {
+      this.components[name] = data;
       this.setSystemsDirty();
     }
-  }, {
-    key: 'applyComponentMixins',
-    value: function applyComponentMixins(Component) {
-      if (!Component.mixins) {
-        return false;
-      }
 
-      for (var i = 0, mixin; mixin = Component.mixins[i]; i += 1) {
-        this[mixin.name] = (0, _utils.fastBind)(this, mixin.method);
-      }
-    }
+    /**
+     * Remove a component from the entity. To preserve performances, we 
+     * simple set the component property to `undefined`. Therefore the 
+     * property is still enumerable after a call to removeComponent()
+     * 
+     * @param  {String} name Name of the component to remove.
+     */
   }, {
     key: 'removeComponent',
-    value: function removeComponent(Component) {
-      if (!this.components[Component.name]) {
+    value: function removeComponent(name) {
+      if (!this.components[name]) {
         return;
       }
 
       this.components[name] = undefined;
       this.setSystemsDirty();
     }
-  }, {
-    key: 'removeComponentMixins',
-    value: function removeComponentMixins(Component) {
-      if (!Component.mixins) {
-        return false;
-      }
 
-      for (var i = 0, mixin; mixin = Component.mixins[i]; i += 1) {
-        this[mixin.name] = undefined;
-      }
-    }
+    /**
+     * Dispose the entity.
+     *
+     * @private
+     */
   }, {
     key: 'dispose',
     value: function dispose() {
