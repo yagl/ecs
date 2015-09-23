@@ -141,7 +141,7 @@ class Entity {
    * @param {Object} data Component data.
    */
   addComponent(name, data) {
-    this.components[name] = data;
+    this.components[name] = data || {};
     this.setSystemsDirty();
   }
   /**
@@ -158,6 +158,44 @@ class Entity {
 
     this.components[name] = undefined;
     this.setSystemsDirty();
+  }
+  /**
+   * Update a component field by field, NOT recursively. If the component
+   * does not exists, this method create it silently.
+   * 
+   * @method updateComponent
+   * @param  {String} name Name of the component
+   * @param  {Object} data Dict of attributes to update
+   * @example
+   *   entity.addComponent('kite', {vel: 0, pos: {x: 1}});
+   *   // entity.component.pos is '{vel: 0, pos: {x: 1}}'
+   *   entity.updateComponent('kite', {angle: 90, pos: {y: 1}});
+   *   // entity.component.pos is '{vel: 0, angle: 90, pos: {y: 1}}'
+   */
+  updateComponent(name, data) {
+    let component = this.components[name];
+
+    if (!component) {
+      this.addComponent(name, data);
+    } else {
+      let keys = Object.keys(data);
+
+      for (let i = 0, key; key = keys[i]; i += 1) {
+        component[key] = data[key];
+      }
+    }
+  }
+  /**
+   * Update a set of components.
+   * 
+   * @param  {Object} componentsData Dict of components to update.
+   */
+  updateComponents(componentsData) {
+    let components = Object.keys(componentsData);
+
+    for (let i = 0, component; components[i]; i += 1) {
+      this.updateComponent(componentsData[component]);
+    }
   }
   /**
    * Dispose the entity.
