@@ -57,7 +57,7 @@ class Entity {
      * 
      * @property {Boolean} systemsDirty
      */
-    this.systemsDirty = true;
+    this.systemsDirty = false;
 
     /**
      * Components of the entity stored as key-value pairs.
@@ -95,6 +95,7 @@ class Entity {
    */
   addToECS(ecs) {
     this.ecs = ecs;
+    this.setSystemsDirty();
   }
   /**
    * Set the systems dirty flag so the ECS knows this entity 
@@ -102,7 +103,7 @@ class Entity {
    * tick.
    */
   setSystemsDirty() {
-    if (!this.systemsDirty) {
+    if (!this.systemsDirty && this.ecs) {
       this.systemsDirty = true;
 
       // notify to parent ECS that this entity needs to be tested next tick

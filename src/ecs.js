@@ -144,6 +144,7 @@ class ECS {
    */
   cleanDirtyEntities() {
     // jshint maxdepth: 4
+
     for (let i = 0, entity; entity = this.entitiesSystemsDirty[i]; i += 1) {
       for (let s = 0, system; system = this.systems[s]; s += 1) {
         // for each dirty entity for each system
@@ -159,6 +160,8 @@ class ECS {
         }
         // else we do nothing the current state is OK
       }
+
+      entity.systemsDirty = false;
     }
     // jshint maxdepth: 3
 
@@ -175,7 +178,7 @@ class ECS {
         break;
       }
 
-      if (this.entitiesSystemsDirty) {
+      if (this.entitiesSystemsDirty.length) {
         // if the last system flagged some entities as dirty check that case
         this.cleanDirtyEntities();
       }

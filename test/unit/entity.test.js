@@ -14,6 +14,15 @@ describe('Entity', () => {
     expect(entity1.id).to.be.not.equal(entity2.id);
   });
 
+  it('should support default components', () => {
+    let entity = new Entity(0, [{
+      name: 'test',
+      defaults: {foo: 'bar'}
+    }]);
+
+    expect(entity.components.test).to.exist.and.to.be.deep.equal({foo: 'bar'});
+  });
+
   describe('addComponent()', () => {
     it('should add a void object when a name is passed', () => {
       let entity = new Entity();
