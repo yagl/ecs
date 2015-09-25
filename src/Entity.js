@@ -194,8 +194,8 @@ class Entity {
   updateComponents(componentsData) {
     let components = Object.keys(componentsData);
 
-    for (let i = 0, component; components[i]; i += 1) {
-      this.updateComponent(componentsData[component]);
+    for (let i = 0, component; component = components[i]; i += 1) {
+      this.updateComponent(component, componentsData[component]);
     }
   }
   /**

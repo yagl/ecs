@@ -44,4 +44,17 @@ describe('Entity', () => {
       expect(entity.components.test).to.deep.equal({foo: 'foo'});
     });
   });
+
+  describe('updateComponents()', () => {
+    it('should update a list of existing component', () => {
+      let entity = new Entity();
+      entity.addComponent('test', {foo: 'bar'});
+
+      expect(entity.components.test).to.deep.equal({foo: 'bar'});
+
+      entity.updateComponents({test: {foo: 'foo'}});
+
+      expect(entity.components.test).to.deep.equal({foo: 'foo'});
+    });
+  });
 });

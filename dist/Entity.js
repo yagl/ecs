@@ -232,8 +232,8 @@ var Entity = (function () {
     value: function updateComponents(componentsData) {
       var components = Object.keys(componentsData);
 
-      for (var i = 0, component = undefined; components[i]; i += 1) {
-        this.updateComponent(componentsData[component]);
+      for (var i = 0, component = undefined; component = components[i]; i += 1) {
+        this.updateComponent(component, componentsData[component]);
       }
     }
 
