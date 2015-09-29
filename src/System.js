@@ -65,8 +65,19 @@ class System {
    * @method  updateAll
    */
   updateAll() {
-    for (var i = 0, entity; entity = this.entities[i]; i += 1) {
+    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
       this.update(entity);
+    }
+  }
+  /**
+   * dispose the system by exiting all the entities
+   *
+   * @method  dispose
+   */
+  dispose() {
+    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
+      entity.removeSystem(this);
+      this.exit(entity);
     }
   }
   // methods to be extended by subclasses

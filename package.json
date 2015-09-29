@@ -1,6 +1,6 @@
 {
   "name": "yagl-ecs",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": "Pierre Beaujeu",
   "description": "Entity Component System for ES6",
   "main": "dist/ecs.js",
@@ -35,6 +35,11 @@
     "url": "https://github.com/yagl/ecs.git"
   },
   "keywords": [
+    "game",
+    "gamedev",
+    "ecs",
+    "entity component system",
+    "design pattern"
   ],
   "licence": "MIT"
 }

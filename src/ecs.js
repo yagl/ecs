@@ -133,6 +133,7 @@ class ECS {
 
     if (index !== -1) {
       this.systems.splice(index, 1);
+      system.dispose();
     }
   }
   /**
