@@ -8,19 +8,41 @@ describe('ECS', () => {
     expect(ecs.systems).to.be.an('array');
   });
 
-  it('should execute the system and call enter()', () => {
-    let ecs = new ECS();
-    let entity = new ECS.Entity();
-    let system = new ECS.System();
+  describe('addSystem()', () => {
+    let ecs, entity, system;
 
-    system.test = () => true;
-    system.enter = sinon.spy();
-    ecs.addSystem(system);
-    ecs.addEntity(entity);
+    beforeEach(() => {
+      ecs = new ECS();
+      entity = new ECS.Entity();
+      system = new ECS.System();
+    });
 
-    ecs.update();
+    it('should call enter() when update', () => {
+      system.test = () => true;
+      system.enter = sinon.spy();
+      ecs.addSystem(system);
+      ecs.addEntity(entity);
 
-    expect(system.enter.calledWith(entity)).to.be.equal(true);
+      ecs.update();
+
+      expect(system.enter.calledWith(entity)).to.be.equal(true);
+    });
+
+    it('should call enter() when removing and re-adding a system', () => {
+      system.test = () => true;
+      system.enter = sinon.spy();
+      ecs.addSystem(system);
+      ecs.addEntity(entity);
+      ecs.update();
+
+      ecs.removeSystem(system);
+      ecs.update();
+
+      ecs.addSystem(system);
+      ecs.update();
+
+      expect(system.enter.calledTwice).to.be.equal(true);
+    });
   });
 
   describe('removeSystem()', () => {

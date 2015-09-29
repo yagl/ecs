@@ -121,6 +121,13 @@ class ECS {
    */
   addSystem(system) {
     this.systems.push(system);
+
+    // iterate over all entities to eventually add system
+    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
+      if (system.test(entity)) {
+        system.addEntity(entity);
+      }
+    }
   }
   /**
    * Remove a system from the ecs.

@@ -161,6 +161,13 @@ var ECS = (function () {
     key: 'addSystem',
     value: function addSystem(system) {
       this.systems.push(system);
+
+      // iterate over all entities to eventually add system
+      for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
+        if (system.test(entity)) {
+          system.addEntity(entity);
+        }
+      }
     }
 
     /**
