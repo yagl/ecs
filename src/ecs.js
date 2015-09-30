@@ -121,6 +121,13 @@ class ECS {
    */
   addSystem(system) {
     this.systems.push(system);
+
+    // iterate over all entities to eventually add system
+    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
+      if (system.test(entity)) {
+        system.addEntity(entity);
+      }
+    }
   }
   /**
    * Remove a system from the ecs.
@@ -133,6 +140,7 @@ class ECS {
 
     if (index !== -1) {
       this.systems.splice(index, 1);
+      system.dispose();
     }
   }
   /**
@@ -144,6 +152,7 @@ class ECS {
    */
   cleanDirtyEntities() {
     // jshint maxdepth: 4
+
     for (let i = 0, entity; entity = this.entitiesSystemsDirty[i]; i += 1) {
       for (let s = 0, system; system = this.systems[s]; s += 1) {
         // for each dirty entity for each system
@@ -159,6 +168,8 @@ class ECS {
         }
         // else we do nothing the current state is OK
       }
+
+      entity.systemsDirty = false;
     }
     // jshint maxdepth: 3
 
@@ -175,7 +186,7 @@ class ECS {
         break;
       }
 
-      if (this.entitiesSystemsDirty) {
+      if (this.entitiesSystemsDirty.length) {
         // if the last system flagged some entities as dirty check that case
         this.cleanDirtyEntities();
       }

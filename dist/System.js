@@ -91,8 +91,22 @@ var System = (function () {
   }, {
     key: "updateAll",
     value: function updateAll() {
-      for (var i = 0, entity; entity = this.entities[i]; i += 1) {
+      for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
         this.update(entity);
+      }
+    }
+
+    /**
+     * dispose the system by exiting all the entities
+     *
+     * @method  dispose
+     */
+  }, {
+    key: "dispose",
+    value: function dispose() {
+      for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
+        entity.removeSystem(this);
+        this.exit(entity);
       }
     }
 

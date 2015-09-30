@@ -161,6 +161,13 @@ var ECS = (function () {
     key: 'addSystem',
     value: function addSystem(system) {
       this.systems.push(system);
+
+      // iterate over all entities to eventually add system
+      for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
+        if (system.test(entity)) {
+          system.addEntity(entity);
+        }
+      }
     }
 
     /**
@@ -176,6 +183,7 @@ var ECS = (function () {
 
       if (index !== -1) {
         this.systems.splice(index, 1);
+        system.dispose();
       }
     }
 
@@ -190,6 +198,7 @@ var ECS = (function () {
     key: 'cleanDirtyEntities',
     value: function cleanDirtyEntities() {
       // jshint maxdepth: 4
+
       for (var i = 0, entity = undefined; entity = this.entitiesSystemsDirty[i]; i += 1) {
         for (var s = 0, system = undefined; system = this.systems[s]; s += 1) {
           // for each dirty entity for each system
@@ -205,6 +214,8 @@ var ECS = (function () {
           }
           // else we do nothing the current state is OK
         }
+
+        entity.systemsDirty = false;
       }
       // jshint maxdepth: 3
 
@@ -224,7 +235,7 @@ var ECS = (function () {
           break;
         }
 
-        if (this.entitiesSystemsDirty) {
+        if (this.entitiesSystemsDirty.length) {
           // if the last system flagged some entities as dirty check that case
           this.cleanDirtyEntities();
         }
