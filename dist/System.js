@@ -90,9 +90,9 @@ var System = (function () {
      */
   }, {
     key: "updateAll",
-    value: function updateAll() {
+    value: function updateAll(elapsed) {
       for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
-        this.update(entity);
+        this.update(entity, elapsed);
       }
     }
 

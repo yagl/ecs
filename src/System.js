@@ -64,9 +64,9 @@ class System {
    *
    * @method  updateAll
    */
-  updateAll() {
+  updateAll(elapsed) {
     for (let i = 0, entity; entity = this.entities[i]; i += 1) {
-      this.update(entity);
+      this.update(entity, elapsed);
     }
   }
   /**

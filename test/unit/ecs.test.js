@@ -8,6 +8,29 @@ describe('ECS', () => {
     expect(ecs.systems).to.be.an('array');
   });
 
+  describe('update()', () => {
+    let ecs, entity, system;
+
+    beforeEach(() => {
+      ecs = new ECS();
+      entity = new ECS.Entity();
+      system = new ECS.System();
+    });
+
+    it('should give the elapsed time to update methods', (done) => {
+      system.test = () => true;
+      system.update = (entity, elapsed) => {
+        expect(elapsed).to.be.a('number');
+        done();
+      };
+
+      ecs.addSystem(system);
+      ecs.addEntity(entity);
+
+      ecs.update();
+    });
+  });
+
   describe('addSystem()', () => {
     let ecs, entity, system;
 

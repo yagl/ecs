@@ -14,6 +14,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @module ecs
  */
 
+/*global performance*/
+
+require('./polyfill');
+
 var _entity = require('./entity');
 
 var _entity2 = _interopRequireDefault(_entity);
@@ -70,6 +74,8 @@ var ECS = (function () {
      * @type {Number}
      */
     this.updateCounter = 0;
+
+    this.lastUpdate = performance.now();
   }
 
   // expose user stuff
@@ -230,6 +236,9 @@ var ECS = (function () {
   }, {
     key: 'update',
     value: function update() {
+      var now = performance.now();
+      var elapsed = now - this.lastUpdate;
+
       for (var i = 0, system = undefined; system = this.systems[i]; i += 1) {
         if (this.updateCounter % system.frequency > 0) {
           break;
@@ -240,10 +249,11 @@ var ECS = (function () {
           this.cleanDirtyEntities();
         }
 
-        system.updateAll();
+        system.updateAll(elapsed);
       }
 
       this.updateCounter += 1;
+      this.lastUpdate = now;
     }
   }]);
 

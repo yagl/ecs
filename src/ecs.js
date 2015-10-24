@@ -4,6 +4,10 @@
  * @module ecs
  */
 
+/*global performance*/
+
+import './polyfill';
+
 import Entity from './entity';
 import System from './system';
 import uid from './uid';
@@ -48,6 +52,8 @@ class ECS {
      * @type {Number}
      */
     this.updateCounter = 0;
+
+    this.lastUpdate = performance.now();
   }
   /**
    * Add an entity to the ecs.
@@ -181,6 +187,9 @@ class ECS {
    * @method update
    */
   update() {
+    let now = performance.now();
+    let elapsed = now - this.lastUpdate;
+
     for (let i = 0, system; system = this.systems[i]; i += 1) {
       if (this.updateCounter % system.frequency > 0) {
         break;
@@ -191,10 +200,11 @@ class ECS {
         this.cleanDirtyEntities();
       }
 
-      system.updateAll();
+      system.updateAll(elapsed);
     }
 
     this.updateCounter += 1;
+    this.lastUpdate = now;
   }
 }
 
