@@ -55,4 +55,18 @@ describe('uid', () => {
 
     expect(salt1).to.be.a('number').and.to.be.not.equal(salt2);
   });
+
+  describe('isSaltedBy()', () => {
+    it('should return true when then id was salted with given salt', () => {
+      let gen1 = new uid.UIDGenerator(1);
+      let gen2 = new uid.UIDGenerator(2);
+
+      let r1 = gen1.next();
+      let r2 = gen2.next();
+
+      expect(uid.isSaltedBy(r1, 1)).to.be.equal(true);
+      expect(uid.isSaltedBy(r2, 1)).to.be.equal(false);
+      expect(uid.isSaltedBy(r2, 2)).to.be.equal(true);
+    });
+  });
 });

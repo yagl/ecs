@@ -56,6 +56,20 @@ class ECS {
     this.lastUpdate = performance.now();
   }
   /**
+   * Retrieve an entity by id
+   * @param  {Number} id id of the entity to retrieve
+   * @return {Entity} The entity if found null otherwise
+   */
+  getEntityById(id) {
+    for (let i = 0, entity; entity = this.entities[i]; i += 1) {
+      if (entity.id === id) {
+        return entity;
+      }
+    }
+
+    return null;
+  }
+  /**
    * Add an entity to the ecs.
    *
    * @method addEntity

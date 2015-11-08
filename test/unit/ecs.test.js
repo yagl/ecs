@@ -8,6 +8,17 @@ describe('ECS', () => {
     expect(ecs.systems).to.be.an('array');
   });
 
+  describe('getEntityById()', () => {
+    it('should retrieve an entity by id', () => {
+      let ecs = new ECS();
+      let entity = new ECS.Entity(123);
+
+      ecs.addEntity(entity);
+
+      expect(ecs.getEntityById(123)).to.be.equal(entity);
+    });
+  });
+
   describe('update()', () => {
     let ecs, entity, system;
 
