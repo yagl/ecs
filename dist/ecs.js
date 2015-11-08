@@ -81,13 +81,30 @@ var ECS = (function () {
   // expose user stuff
 
   /**
-   * Add an entity to the ecs.
-   *
-   * @method addEntity
-   * @param {Entity} entity The entity to add.
+   * Retrieve an entity by id
+   * @param  {Number} id id of the entity to retrieve
+   * @return {Entity} The entity if found null otherwise
    */
 
   _createClass(ECS, [{
+    key: 'getEntityById',
+    value: function getEntityById(id) {
+      for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
+        if (entity.id === id) {
+          return entity;
+        }
+      }
+
+      return null;
+    }
+
+    /**
+     * Add an entity to the ecs.
+     *
+     * @method addEntity
+     * @param {Entity} entity The entity to add.
+     */
+  }, {
     key: 'addEntity',
     value: function addEntity(entity) {
       this.entities.push(entity);
