@@ -245,7 +245,7 @@ var Entity = (function () {
   }, {
     key: 'dispose',
     value: function dispose() {
-      for (var i = 0, system; system = this.systems[i]; i += 1) {
+      for (var i = 0, system; system = this.systems[0]; i += 1) {
         system.removeEntity(this);
       }
     }

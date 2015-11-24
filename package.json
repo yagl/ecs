@@ -1,6 +1,6 @@
 {
   "name": "yagl-ecs",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "author": "Pierre Beaujeu",
   "description": "Entity Component System for ES6",
   "main": "dist/ecs.js",

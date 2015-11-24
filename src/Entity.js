@@ -204,7 +204,7 @@ class Entity {
    * @private
    */
   dispose() {
-    for (var i = 0, system; system = this.systems[i]; i += 1) {
+    for (var i = 0, system; system = this.systems[0]; i += 1) {
       system.removeEntity(this);
     }
   }
