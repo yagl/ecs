@@ -14,8 +14,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @module ecs
  */
 
-/*global performance*/
-
 require('./polyfill');
 
 var _entity = require('./entity');
@@ -25,6 +23,10 @@ var _entity2 = _interopRequireDefault(_entity);
 var _system = require('./system');
 
 var _system2 = _interopRequireDefault(_system);
+
+var _performance = require('./performance');
+
+var _performance2 = _interopRequireDefault(_performance);
 
 var _uid = require('./uid');
 
@@ -75,7 +77,7 @@ var ECS = (function () {
      */
     this.updateCounter = 0;
 
-    this.lastUpdate = performance.now();
+    this.lastUpdate = _performance2['default'].now();
   }
 
   // expose user stuff
@@ -253,7 +255,7 @@ var ECS = (function () {
   }, {
     key: 'update',
     value: function update() {
-      var now = performance.now();
+      var now = _performance2['default'].now();
       var elapsed = now - this.lastUpdate;
 
       for (var i = 0, system = undefined; system = this.systems[i]; i += 1) {

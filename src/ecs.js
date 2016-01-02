@@ -4,12 +4,11 @@
  * @module ecs
  */
 
-/*global performance*/
-
 import './polyfill';
 
 import Entity from './entity';
 import System from './system';
+import performance from './performance';
 import uid from './uid';
 
 /**
