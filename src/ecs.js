@@ -4,8 +4,6 @@
  * @module ecs
  */
 
-import './polyfill';
-
 import Entity from './entity';
 import System from './system';
 import performance from './performance';

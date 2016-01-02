@@ -14,8 +14,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @module ecs
  */
 
-require('./polyfill');
-
 var _entity = require('./entity');
 
 var _entity2 = _interopRequireDefault(_entity);
