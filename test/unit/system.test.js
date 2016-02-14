@@ -86,8 +86,26 @@ describe('System', () => {
       system.updateAll();
 
       expect(system.update.calledTwice).to.be.equal(true);
-      expect(system.update.calledWith(entity1)).to.be.equal(true);      
-      expect(system.update.calledWith(entity2)).to.be.equal(true);      
+      expect(system.update.calledWith(entity1)).to.be.equal(true);
+      expect(system.update.calledWith(entity2)).to.be.equal(true);
+    });
+
+    it('should call preUpdate()', () => {
+      let system = new System();
+      system.preUpdate = sinon.spy();
+
+      system.updateAll();
+
+      expect(system.preUpdate.called).to.be.equal(true);
+    });
+
+    it('should call postUpdate()', () => {
+      let system = new System();
+      system.postUpdate = sinon.spy();
+
+      system.updateAll();
+
+      expect(system.postUpdate.called).to.be.equal(true);
     });
   });
 });

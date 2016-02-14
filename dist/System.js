@@ -15,8 +15,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * @class  System
  *
- * @description  A system update all eligible entities at a given frequency. 
- * This class is not meant to be used directly and should be sub-classed to 
+ * @description  A system update all eligible entities at a given frequency.
+ * This class is not meant to be used directly and should be sub-classed to
  * define specific logic.
  */
 
@@ -41,7 +41,7 @@ var System = (function () {
 
     /**
      * Entities of the system.
-     * 
+     *
      * @property {Array[Entity]} entities
      */
     this.entities = [];
@@ -51,7 +51,7 @@ var System = (function () {
 
   /**
    * Add an entity to the system entities.
-   * 
+   *
    * @param {Entity} entity The entity to add to the system.
    */
 
@@ -67,7 +67,7 @@ var System = (function () {
     /**
      * Remove an entity from the system entities. exit() handler is executed
      * only if the entity actually exists in the system entities.
-     * 
+     *
      * @param  {Entity} entity Reference of the entity to remove.
      */
   }, {
@@ -91,9 +91,13 @@ var System = (function () {
   }, {
     key: "updateAll",
     value: function updateAll(elapsed) {
+      this.preUpdate();
+
       for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
         this.update(entity, elapsed);
       }
+
+      this.postUpdate();
     }
 
     /**
@@ -111,6 +115,26 @@ var System = (function () {
     }
 
     // methods to be extended by subclasses
+    /**
+     * Abstract method to subclass. Called once per update, before entities
+     * iteration.
+     *
+     * @method  preUpdate
+     */
+  }, {
+    key: "preUpdate",
+    value: function preUpdate() {}
+
+    /**
+     * Abstract method to subclass. Called once per update, after entities
+     * iteration.
+     *
+     * @method  postUpdate
+     */
+  }, {
+    key: "postUpdate",
+    value: function postUpdate() {}
+
     /**
      * Abstract method to subclass. Should return true if the entity is eligible
      * to the system, false otherwise.
@@ -145,9 +169,9 @@ var System = (function () {
     value: function exit(entity) {}
 
     /**
-     * Abstract method to subclass. Called for each entity to update. This is 
+     * Abstract method to subclass. Called for each entity to update. This is
      * the only method that should actual mutate entity state.
-     * 
+     *
      * @method  update
      * @param  {Entity} entity The entity to update.
      */

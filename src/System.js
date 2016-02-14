@@ -7,8 +7,8 @@
 /**
  * @class  System
  *
- * @description  A system update all eligible entities at a given frequency. 
- * This class is not meant to be used directly and should be sub-classed to 
+ * @description  A system update all eligible entities at a given frequency.
+ * This class is not meant to be used directly and should be sub-classed to
  * define specific logic.
  */
 class System {
@@ -27,14 +27,14 @@ class System {
 
     /**
      * Entities of the system.
-     * 
+     *
      * @property {Array[Entity]} entities
      */
     this.entities = [];
   }
   /**
    * Add an entity to the system entities.
-   * 
+   *
    * @param {Entity} entity The entity to add to the system.
    */
   addEntity(entity) {
@@ -46,7 +46,7 @@ class System {
   /**
    * Remove an entity from the system entities. exit() handler is executed
    * only if the entity actually exists in the system entities.
-   * 
+   *
    * @param  {Entity} entity Reference of the entity to remove.
    */
   removeEntity(entity) {
@@ -65,9 +65,13 @@ class System {
    * @method  updateAll
    */
   updateAll(elapsed) {
+    this.preUpdate();
+
     for (let i = 0, entity; entity = this.entities[i]; i += 1) {
       this.update(entity, elapsed);
     }
+
+    this.postUpdate();
   }
   /**
    * dispose the system by exiting all the entities
@@ -81,6 +85,20 @@ class System {
     }
   }
   // methods to be extended by subclasses
+  /**
+   * Abstract method to subclass. Called once per update, before entities
+   * iteration.
+   *
+   * @method  preUpdate
+   */
+  preUpdate() {}
+  /**
+   * Abstract method to subclass. Called once per update, after entities
+   * iteration.
+   *
+   * @method  postUpdate
+   */
+  postUpdate() {}
   /**
    * Abstract method to subclass. Should return true if the entity is eligible
    * to the system, false otherwise.
@@ -106,9 +124,9 @@ class System {
    */
   exit(entity) {}
   /**
-   * Abstract method to subclass. Called for each entity to update. This is 
+   * Abstract method to subclass. Called for each entity to update. This is
    * the only method that should actual mutate entity state.
-   * 
+   *
    * @method  update
    * @param  {Entity} entity The entity to update.
    */
