@@ -146,11 +146,15 @@ If you have more in-depth questions about how to structure a bigger project with
 
 ## Documentation
 
-The full documentation of methods can be found on [yagl.github.io](yagl.github.io).
+The full documentation of methods can be found on [yagl.github.io/docs/ecs](yagl.github.io/docs/ecs). Please note that documentation is still a WIP.
 
-## Roadmap 0.1
+## Roadmap
 
- * Finish unit tests :D
+I'll publish the 0.1 by the end of march. Below a list of TODOs even if the target is not 0.1.
+
+ * Maybe more unit test
+ * Complete and publish documentation
+ * Maybe create a benchmark to track performance evolution
 
 ## License
 
