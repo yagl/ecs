@@ -1,14 +1,16 @@
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, '__esModule', {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 /**
  * @module  ecs
  */
+
+var _utils = require('./utils');
 
 // forced to disable this check for abstract methods
 // jshint unused:false
@@ -56,7 +58,7 @@ var System = (function () {
    */
 
   _createClass(System, [{
-    key: "addEntity",
+    key: 'addEntity',
     value: function addEntity(entity) {
       entity.addSystem(this);
       this.entities.push(entity);
@@ -71,13 +73,13 @@ var System = (function () {
      * @param  {Entity} entity Reference of the entity to remove.
      */
   }, {
-    key: "removeEntity",
+    key: 'removeEntity',
     value: function removeEntity(entity) {
       var index = this.entities.indexOf(entity);
 
       if (index !== -1) {
         entity.removeSystem(this);
-        this.entities.splice(index, 1);
+        (0, _utils.fastSplice)(this.entities, index, 1);
 
         this.exit(entity);
       }
@@ -89,7 +91,7 @@ var System = (function () {
      * @method  updateAll
      */
   }, {
-    key: "updateAll",
+    key: 'updateAll',
     value: function updateAll(elapsed) {
       this.preUpdate();
 
@@ -106,7 +108,7 @@ var System = (function () {
      * @method  dispose
      */
   }, {
-    key: "dispose",
+    key: 'dispose',
     value: function dispose() {
       for (var i = 0, entity = undefined; entity = this.entities[i]; i += 1) {
         entity.removeSystem(this);
@@ -122,7 +124,7 @@ var System = (function () {
      * @method  preUpdate
      */
   }, {
-    key: "preUpdate",
+    key: 'preUpdate',
     value: function preUpdate() {}
 
     /**
@@ -132,7 +134,7 @@ var System = (function () {
      * @method  postUpdate
      */
   }, {
-    key: "postUpdate",
+    key: 'postUpdate',
     value: function postUpdate() {}
 
     /**
@@ -143,7 +145,7 @@ var System = (function () {
      * @param  {Entity} entity The entity to test.
      */
   }, {
-    key: "test",
+    key: 'test',
     value: function test(entity) {
       return false;
     }
@@ -155,7 +157,7 @@ var System = (function () {
      * @param  {Entity} entity The added entity.
      */
   }, {
-    key: "enter",
+    key: 'enter',
     value: function enter(entity) {}
 
     /**
@@ -165,7 +167,7 @@ var System = (function () {
      * @param  {Entity} entity The removed entity.
      */
   }, {
-    key: "exit",
+    key: 'exit',
     value: function exit(entity) {}
 
     /**
@@ -176,12 +178,12 @@ var System = (function () {
      * @param  {Entity} entity The entity to update.
      */
   }, {
-    key: "update",
+    key: 'update',
     value: function update(entity) {}
   }]);
 
   return System;
 })();
 
-exports["default"] = System;
-module.exports = exports["default"];
+exports['default'] = System;
+module.exports = exports['default'];

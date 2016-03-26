@@ -12,9 +12,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var _uid = require('./uid');
 
+var _utils = require('./utils');
+
 /**
  * An entity.
- * 
+ *
  * @class  Entity
  */
 
@@ -22,7 +24,7 @@ var Entity = (function () {
   /**
    * @class Entity
    * @constructor
-   * 
+   *
    * @param  {Number|UIDGenerator} [idOrUidGenerator=null] The entity id if
    * a Number is passed. If an UIDGenerator is passed, the entity will use
    * it to generate a new id. If nothing is passed, the entity will use
@@ -38,7 +40,7 @@ var Entity = (function () {
 
     /**
      * Unique identifier of the entity.
-     * 
+     *
      * @property {Number} id
      */
     this.id = null;
@@ -60,7 +62,7 @@ var Entity = (function () {
 
     /**
      * Systems applied to the entity.
-     * 
+     *
      * @property {Array[System]} systems
      */
     this.systems = [];
@@ -68,14 +70,14 @@ var Entity = (function () {
     /**
      * Indiquate a change in components (a component was removed or added)
      * which require to re-compute entity eligibility to all systems.
-     * 
+     *
      * @property {Boolean} systemsDirty
      */
     this.systemsDirty = false;
 
     /**
      * Components of the entity stored as key-value pairs.
-     * 
+     *
      * @property {Object} components
      */
     this.components = {};
@@ -116,8 +118,8 @@ var Entity = (function () {
     }
 
     /**
-     * Set the systems dirty flag so the ECS knows this entity 
-     * needs to recompute eligibility at the beginning of next 
+     * Set the systems dirty flag so the ECS knows this entity
+     * needs to recompute eligibility at the beginning of next
      * tick.
      */
   }, {
@@ -155,7 +157,7 @@ var Entity = (function () {
       var index = this.systems.indexOf(system);
 
       if (index !== -1) {
-        this.systems.splice(index, 1);
+        (0, _utils.fastSplice)(this.systems, index, 1);
       }
     }
 
@@ -164,7 +166,7 @@ var Entity = (function () {
      * components data but assign directly the reference for maximum
      * performances. Be sure not to pass the same component reference to
      * many entities.
-     * 
+     *
      * @param {String} name Attribute name of the component to add.
      * @param {Object} data Component data.
      */
@@ -176,10 +178,10 @@ var Entity = (function () {
     }
 
     /**
-     * Remove a component from the entity. To preserve performances, we 
-     * simple set the component property to `undefined`. Therefore the 
+     * Remove a component from the entity. To preserve performances, we
+     * simple set the component property to `undefined`. Therefore the
      * property is still enumerable after a call to removeComponent()
-     * 
+     *
      * @param  {String} name Name of the component to remove.
      */
   }, {
@@ -196,7 +198,7 @@ var Entity = (function () {
     /**
      * Update a component field by field, NOT recursively. If the component
      * does not exists, this method create it silently.
-     * 
+     *
      * @method updateComponent
      * @param  {String} name Name of the component
      * @param  {Object} data Dict of attributes to update
@@ -224,7 +226,7 @@ var Entity = (function () {
 
     /**
      * Update a set of components.
-     * 
+     *
      * @param  {Object} componentsData Dict of components to update.
      */
   }, {

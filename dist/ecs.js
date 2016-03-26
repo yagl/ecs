@@ -30,6 +30,8 @@ var _uid = require('./uid');
 
 var _uid2 = _interopRequireDefault(_uid);
 
+var _utils = require('./utils');
+
 /**
  * @class  ECS
  */
@@ -130,7 +132,8 @@ var ECS = (function () {
 
         entity.dispose();
         this.removeEntityIfDirty(entityRemoved);
-        this.entities.splice(index, 1);
+
+        (0, _utils.fastSplice)(this.entities, index, 1);
       }
 
       return entityRemoved;
@@ -150,7 +153,8 @@ var ECS = (function () {
         if (entity.id === entityId) {
           entity.dispose();
           this.removeEntityIfDirty(entity);
-          this.entities.splice(i, 1);
+
+          (0, _utils.fastSplice)(this.entities, i, 1);
 
           return entity;
         }
@@ -170,7 +174,7 @@ var ECS = (function () {
       var index = this.entitiesSystemsDirty.indexOf(entity);
 
       if (index !== -1) {
-        this.entitiesSystemsDirty.splice(index, 1);
+        (0, _utils.fastSplice)(this.entities, index, 1);
       }
     }
 
@@ -205,7 +209,7 @@ var ECS = (function () {
       var index = this.systems.indexOf(system);
 
       if (index !== -1) {
-        this.systems.splice(index, 1);
+        (0, _utils.fastSplice)(this.systems, index, 1);
         system.dispose();
       }
     }
