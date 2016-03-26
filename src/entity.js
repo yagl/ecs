@@ -2,18 +2,19 @@
  * @module  ecs
  */
 
-import {UIDGenerator, DefaultUIDGenerator} from './uid';
+import { UIDGenerator, DefaultUIDGenerator } from './uid';
+import { fastSplice } from './utils';
 
 /**
  * An entity.
- * 
+ *
  * @class  Entity
  */
 class Entity {
   /**
    * @class Entity
    * @constructor
-   * 
+   *
    * @param  {Number|UIDGenerator} [idOrUidGenerator=null] The entity id if
    * a Number is passed. If an UIDGenerator is passed, the entity will use
    * it to generate a new id. If nothing is passed, the entity will use
@@ -24,7 +25,7 @@ class Entity {
   constructor(idOrUidGenerator, components = []) {
     /**
      * Unique identifier of the entity.
-     * 
+     *
      * @property {Number} id
      */
     this.id = null;
@@ -35,7 +36,7 @@ class Entity {
       this.id = idOrUidGenerator;
     } else if (idOrUidGenerator instanceof UIDGenerator) {
       // if an instance of UIDGenerator was passed then use it to generate
-      // the id. This allow the user to use multiple UID generators and 
+      // the id. This allow the user to use multiple UID generators and
       // therefore to create entities with unique ids accross a cluster
       // or an async environment. See uid.js for more details
       this.id = idOrUidGenerator.next();
@@ -46,7 +47,7 @@ class Entity {
 
     /**
      * Systems applied to the entity.
-     * 
+     *
      * @property {Array[System]} systems
      */
     this.systems = [];
@@ -54,14 +55,14 @@ class Entity {
     /**
      * Indiquate a change in components (a component was removed or added)
      * which require to re-compute entity eligibility to all systems.
-     * 
+     *
      * @property {Boolean} systemsDirty
      */
     this.systemsDirty = false;
 
     /**
      * Components of the entity stored as key-value pairs.
-     * 
+     *
      * @property {Object} components
      */
     this.components = {};
@@ -71,12 +72,12 @@ class Entity {
       // if a getDefaults method is provided, use it. First because let the
       // runtime allocate the component is way more faster than using a copy
       // function. Secondly because the user may want to provide some kind
-      // of logic in components initialisation ALTHOUGH these kind of 
+      // of logic in components initialisation ALTHOUGH these kind of
       // initialisation should be done in enter() handler
       if (component.getDefaults) {
         this.components[component.name] = component.getDefaults();
       } else {
-        this.components[component.name] = Object.assign({}, 
+        this.components[component.name] = Object.assign({},
           components[i].defaults);
       }
     }
@@ -98,8 +99,8 @@ class Entity {
     this.setSystemsDirty();
   }
   /**
-   * Set the systems dirty flag so the ECS knows this entity 
-   * needs to recompute eligibility at the beginning of next 
+   * Set the systems dirty flag so the ECS knows this entity
+   * needs to recompute eligibility at the beginning of next
    * tick.
    */
   setSystemsDirty() {
@@ -129,7 +130,7 @@ class Entity {
     let index = this.systems.indexOf(system);
 
     if (index !== -1) {
-      this.systems.splice(index, 1);
+      fastSplice(this.systems, index, 1);
     }
   }
   /**
@@ -137,7 +138,7 @@ class Entity {
    * components data but assign directly the reference for maximum
    * performances. Be sure not to pass the same component reference to
    * many entities.
-   * 
+   *
    * @param {String} name Attribute name of the component to add.
    * @param {Object} data Component data.
    */
@@ -146,10 +147,10 @@ class Entity {
     this.setSystemsDirty();
   }
   /**
-   * Remove a component from the entity. To preserve performances, we 
-   * simple set the component property to `undefined`. Therefore the 
+   * Remove a component from the entity. To preserve performances, we
+   * simple set the component property to `undefined`. Therefore the
    * property is still enumerable after a call to removeComponent()
-   * 
+   *
    * @param  {String} name Name of the component to remove.
    */
   removeComponent(name) {
@@ -163,7 +164,7 @@ class Entity {
   /**
    * Update a component field by field, NOT recursively. If the component
    * does not exists, this method create it silently.
-   * 
+   *
    * @method updateComponent
    * @param  {String} name Name of the component
    * @param  {Object} data Dict of attributes to update
@@ -188,7 +189,7 @@ class Entity {
   }
   /**
    * Update a set of components.
-   * 
+   *
    * @param  {Object} componentsData Dict of components to update.
    */
   updateComponents(componentsData) {

@@ -8,6 +8,7 @@ import Entity from './entity';
 import System from './system';
 import performance from './performance';
 import uid from './uid';
+import { fastSplice } from './utils';
 
 /**
  * @class  ECS
@@ -93,7 +94,8 @@ class ECS {
 
       entity.dispose();
       this.removeEntityIfDirty(entityRemoved);
-      this.entities.splice(index, 1);
+
+      fastSplice(this.entities, index, 1);
     }
 
     return entityRemoved;
@@ -110,7 +112,8 @@ class ECS {
       if (entity.id === entityId) {
         entity.dispose();
         this.removeEntityIfDirty(entity);
-        this.entities.splice(i, 1);
+
+        fastSplice(this.entities, i, 1);
 
         return entity;
       }
@@ -127,7 +130,7 @@ class ECS {
     let index = this.entitiesSystemsDirty.indexOf(entity);
 
     if (index !== -1) {
-      this.entitiesSystemsDirty.splice(index, 1);
+      fastSplice(this.entities, index, 1);
     }
   }
   /**
@@ -156,7 +159,7 @@ class ECS {
     let index = this.systems.indexOf(system);
 
     if (index !== -1) {
-      this.systems.splice(index, 1);
+      fastSplice(this.systems, index, 1);
       system.dispose();
     }
   }
