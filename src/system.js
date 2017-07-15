@@ -67,13 +67,13 @@ class System {
    * @method  updateAll
    */
   updateAll(elapsed) {
-    this.preUpdate();
+    this.preUpdate(elapsed);
 
     for (let i = 0, entity; entity = this.entities[i]; i += 1) {
       this.update(entity, elapsed);
     }
 
-    this.postUpdate();
+    this.postUpdate(elapsed);
   }
   /**
    * dispose the system by exiting all the entities
@@ -93,14 +93,14 @@ class System {
    *
    * @method  preUpdate
    */
-  preUpdate() {}
+  preUpdate(elapsed) {}
   /**
    * Abstract method to subclass. Called once per update, after entities
    * iteration.
    *
    * @method  postUpdate
    */
-  postUpdate() {}
+  postUpdate(elapsed) {}
   /**
    * Abstract method to subclass. Should return true if the entity is eligible
    * to the system, false otherwise.
