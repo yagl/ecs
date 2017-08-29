@@ -37,7 +37,7 @@ const Position = {
 };
 
 // update entity position based on key pressed
-class KeyboardControlSystem extends ECS.Sytem {
+class KeyboardControlSystem extends ECS.System {
     // called each game loop
     update(entity) {
         let {pos} = entity.components;
