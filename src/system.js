@@ -33,6 +33,7 @@ class System {
      * @property {Array[Entity]} entities
      */
     this.entities = [];
+    this.enable();
   }
   /**
    * Add an entity to the system entities.
@@ -44,6 +45,22 @@ class System {
     this.entities.push(entity);
 
     this.enter(entity);
+  }
+  /**
+   * Enable this system.
+   *
+   * @method  disable
+   */
+  disable() {
+    this.enabled = false;
+  }
+  /**
+   * Disable this system.
+   *
+   * @method  enable
+   */
+  enable() {
+    this.enabled = true;
   }
   /**
    * Remove an entity from the system entities. exit() handler is executed

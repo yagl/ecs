@@ -47,6 +47,7 @@ var System = (function () {
      * @property {Array[Entity]} entities
      */
     this.entities = [];
+    this.enable();
   }
 
   // jshint unused:true
@@ -64,6 +65,28 @@ var System = (function () {
       this.entities.push(entity);
 
       this.enter(entity);
+    }
+
+    /**
+     * Enable this system.
+     *
+     * @method  disable
+     */
+  }, {
+    key: 'disable',
+    value: function disable() {
+      this.enabled = false;
+    }
+
+    /**
+     * Disable this system.
+     *
+     * @method  enable
+     */
+  }, {
+    key: 'enable',
+    value: function enable() {
+      this.enabled = true;
     }
 
     /**

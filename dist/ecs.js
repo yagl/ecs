@@ -261,7 +261,7 @@ var ECS = (function () {
       var elapsed = now - this.lastUpdate;
 
       for (var i = 0, system = undefined; system = this.systems[i]; i += 1) {
-        if (this.updateCounter % system.frequency > 0) {
+        if (this.updateCounter % system.frequency > 0 || !system.enabled) {
           break;
         }
 
