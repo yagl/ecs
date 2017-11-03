@@ -205,8 +205,11 @@ class ECS {
     let elapsed = now - this.lastUpdate;
 
     for (let i = 0, system; system = this.systems[i]; i += 1) {
-      if (this.updateCounter % system.frequency > 0 || !system.enabled) {
+      if (this.updateCounter % system.frequency > 0) {
         break;
+      }
+      if (!system.enabled) {
+        continue;
       }
 
       if (this.entitiesSystemsDirty.length) {

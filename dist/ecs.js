@@ -261,8 +261,11 @@ var ECS = (function () {
       var elapsed = now - this.lastUpdate;
 
       for (var i = 0, system = undefined; system = this.systems[i]; i += 1) {
-        if (this.updateCounter % system.frequency > 0 || !system.enabled) {
+        if (this.updateCounter % system.frequency > 0) {
           break;
+        }
+        if (!system.enabled) {
+          continue;
         }
 
         if (this.entitiesSystemsDirty.length) {
