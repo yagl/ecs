@@ -208,6 +208,9 @@ class ECS {
       if (this.updateCounter % system.frequency > 0) {
         break;
       }
+      if (!system.enabled) {
+        continue;
+      }
 
       if (this.entitiesSystemsDirty.length) {
         // if the last system flagged some entities as dirty check that case
