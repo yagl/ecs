@@ -206,7 +206,7 @@ class ECS {
 
     for (let i = 0, system; system = this.systems[i]; i += 1) {
       if (this.updateCounter % system.frequency > 0) {
-        break;
+        continue;
       }
 
       if (this.entitiesSystemsDirty.length) {
